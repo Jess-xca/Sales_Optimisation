@@ -16,7 +16,7 @@ The Random Forest model predicts sales by learning from historical data, conside
 The model was tuned for accuracy (see 'Sales Prediction Models') and used to forecast future sales, guiding inventory decisions.
 
 ## Why It Matters
-This analysis helps Simba Supermarket:
+This analysis helps Supermarket:
 - **Plan Inventory**: Stock the right amount of each product to meet demand without wasting resources.
 - **Reduce Costs**: Avoid overstock (which ties up capital) and stockouts (which lose sales).
 - **Boost Sales**: Prioritize high-performing products and time promotions effectively.

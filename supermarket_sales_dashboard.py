@@ -21,8 +21,9 @@ st.set_page_config(page_title="Supermarket Sales Optimization Dashboard", layout
 
 # Expected columns in the dataset
 EXPECTED_COLUMNS = [
-    'Date', 'Time', 'City', 'Gender', 'Customer type', 'Payment', 'Unit price', 
-    'Quantity', 'Total', 'Rating', 'gross income', 'Product line'
+    'Invoice ID', 'Branch', 'City', 'Customer type', 'Gender', 'Product line',
+    'Unit price', 'Quantity', 'Tax 18%', 'Total', 'Date', 'Time', 'Payment',
+    'cogs', 'gross margin percentage', 'gross income', 'Rating'
 ]
 
 # Load and preprocess data
@@ -44,6 +45,24 @@ def load_data(file):
         if not np.issubdtype(df['Quantity'].dtype, np.number):
             st.error("'Quantity' column must be numeric.")
             return None
+        if not np.issubdtype(df['Tax 18%'].dtype, np.number):
+            st.error("'Tax 18%' column must be numeric.")
+            return None
+        if not np.issubdtype(df['Total'].dtype, np.number):
+            st.error("'Total' column must be numeric.")
+            return None
+        if not np.issubdtype(df['cogs'].dtype, np.number):
+            st.error("'cogs' column must be numeric.")
+            return None
+        if not np.issubdtype(df['gross margin percentage'].dtype, np.number):
+            st.error("'gross margin percentage' column must be numeric.")
+            return None
+        if not np.issubdtype(df['gross income'].dtype, np.number):
+            st.error("'gross income' column must be numeric.")
+            return None
+        if not np.issubdtype(df['Rating'].dtype, np.number):
+            st.error("'Rating' column must be numeric.")
+            return None
             
         # Parse date and time together
         try:
@@ -63,11 +82,18 @@ def load_data(file):
         df.fillna({
             'Unit price': df['Unit price'].mean(),
             'Quantity': df['Quantity'].median(),
-            'Rating': df['Rating'].mean(),
+            'Tax 18%': df['Tax 18%'].mean(),
+            'Total': df['Total'].mean(),
+            'cogs': df['cogs'].mean(),
+            'gross margin percentage': df['gross margin percentage'].mean(),
             'gross income': df['gross income'].mean(),
+            'Rating': df['Rating'].mean(),
+            'Invoice ID': 'Unknown',
+            'Branch': df['Branch'].mode()[0],
             'City': df['City'].mode()[0],
-            'Gender': df['Gender'].mode()[0],
             'Customer type': df['Customer type'].mode()[0],
+            'Gender': df['Gender'].mode()[0],
+            'Product line': df['Product line'].mode()[0],
             'Payment': df['Payment'].mode()[0]
         }, inplace=True)
         
@@ -89,6 +115,35 @@ if uploaded_file is None:
     # Dashboard title
     st.title("📊 Supermarket Sales Dashboard")
     st.error("Please upload the dataset to continue.")
+    
+    # Download sample dataset
+    st.subheader("📥 Download Sample Dataset Template")
+    sample_data = pd.DataFrame({
+        'Invoice ID': ['750-67-8428'],
+        'Branch': ['Kicukiro'],
+        'City': ['Kigali'],
+        'Customer type': ['Member'],
+        'Gender': ['Female'],
+        'Product line': ['Health and beauty'],
+        'Unit price': [74.69],
+        'Quantity': [7],
+        'Tax 18%': [26.1415],
+        'Total': [548.9715],
+        'Date': ['1/5/2019'],
+        'Time': ['13:08'],
+        'Payment': ['Ewallet'],
+        'cogs': [522.83],
+        'gross margin percentage': [4.761904762],
+        'gross income': [26.1415],
+        'Rating': [9.1]
+    })
+    sample_csv = sample_data.to_csv(index=False)
+    st.download_button(
+        label="Download Sample CSV",
+        data=sample_csv,
+        file_name="sample_supermarket_sales.csv",
+        mime="text/csv"
+    )
     st.stop()
 
 df = load_data(uploaded_file)
@@ -123,6 +178,35 @@ if filtered_df.empty:
 
 # Dashboard title
 st.title("📊 Supermarket Sales Dashboard")
+
+# Download sample dataset (also available after upload)
+st.subheader("📥 Download Sample Dataset Template")
+sample_data = pd.DataFrame({
+    'Invoice ID': ['750-67-8428'],
+    'Branch': ['Kicukiro'],
+    'City': ['Kigali'],
+    'Customer type': ['Member'],
+    'Gender': ['Female'],
+    'Product line': ['Health and beauty'],
+    'Unit price': [74.69],
+    'Quantity': [7],
+    'Tax 18%': [26.1415],
+    'Total': [548.9715],
+    'Date': ['1/5/2019'],
+    'Time': ['13:08'],
+    'Payment': ['Ewallet'],
+    'cogs': [522.83],
+    'gross margin percentage': [4.761904762],
+    'gross income': [26.1415],
+    'Rating': [9.1]
+})
+sample_csv = sample_data.to_csv(index=False)
+st.download_button(
+    label="Download Sample CSV",
+    data=sample_csv,
+    file_name="sample_supermarket_sales.csv",
+    mime="text/csv"
+)
 
 # Show data
 st.subheader("Sample of Filtered Data")
@@ -332,7 +416,7 @@ except FileNotFoundError:
 
 # Footer
 st.markdown("---")
-st.markdown("Made with ❤️ by Your Group | AUCA | Big Data Project")
+st.markdown("Made with ❤️ by US | AUCA | Big Data Project")
 
 if __name__ == "__main__":
     st.write("Thank you for using our system.")
