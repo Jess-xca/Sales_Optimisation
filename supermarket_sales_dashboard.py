@@ -87,7 +87,7 @@ st.sidebar.header("Upload Dataset")
 uploaded_file = st.sidebar.file_uploader("Upload supermarket_sales.csv", type=["csv"])
 if uploaded_file is None:
     # Dashboard title
-    st.title("📊 Simba Supermarket Sales Dashboard")
+    st.title("📊 Supermarket Sales Dashboard")
     st.error("Please upload the dataset to continue.")
     st.stop()
 
@@ -122,7 +122,7 @@ if filtered_df.empty:
     st.stop()
 
 # Dashboard title
-st.title("📊 Simba Supermarket Sales Dashboard")
+st.title("📊 Supermarket Sales Dashboard")
 
 # Show data
 st.subheader("Sample of Filtered Data")
