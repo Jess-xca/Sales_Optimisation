@@ -187,4 +187,4 @@ This project is for educational purposes and developed by US at AUCA for a Big D
 
 ---
 
-**Made with ❤️ by Your US | AUCA | Big Data Project**
+**Made with ❤️ by US | AUCA | Big Data Project**
