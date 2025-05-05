@@ -11,6 +11,8 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import warnings
 import io
 import uuid
+import plotly.express as px
+import calendar
 
 warnings.filterwarnings('ignore')
 
@@ -75,6 +77,8 @@ def load_data(file):
 st.sidebar.header("Upload Dataset")
 uploaded_file = st.sidebar.file_uploader("Upload supermarket_sales.csv", type=["csv"])
 if uploaded_file is None:
+    # Dashboard title
+    st.title("📊 Simba Supermarket Sales Dashboard")
     st.error("Please upload the dataset to continue.")
     st.stop()
 
@@ -157,12 +161,10 @@ else:
 st.subheader("📅 Monthly Sales Seasonality")
 if not filtered_df.empty:
     monthly_sales = filtered_df.groupby("Month")["Total"].mean().reset_index()
-    fig2, ax2 = plt.subplots(figsize=(10, 4))
-    sns.barplot(data=monthly_sales, x='Month', y='Total', ax=ax2)
-    ax2.set_title("Average Sales by Month")
-    ax2.set_xlabel("Month")
-    ax2.set_ylabel("Average Sales")
-    st.pyplot(fig2)
+    monthly_sales['Month_Name'] = monthly_sales['Month'].apply(lambda x: calendar.month_name[int(x)])
+    fig2 = px.bar(monthly_sales, x='Month_Name', y='Total', title="Average Sales by Month",
+                  labels={'Month_Name': 'Month', 'Total': 'Average Sales'})
+    st.plotly_chart(fig2, use_container_width=True)
 else:
     st.write("No data available for the selected filters.")
 
